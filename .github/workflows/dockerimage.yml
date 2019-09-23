@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Login to docker
+      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag tinacms/deploy-image:$(echo "${{ github.sha }}" | cut -c1-7) --tag tinacms/deploy-image:latest
+
+    - name: Push docker image
+      run: docker push tinacms/deploy-image:$(echo "${{ github.sha }}" | cut -c1-7)
+
+    - name: Push latest tag
+      if: github.ref == 'refs/heads/master'
+      run: docker push tinacms/deploy-image:latest
