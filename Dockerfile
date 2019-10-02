@@ -16,7 +16,7 @@ RUN apk --update --no-cache add \
   python3 \
   tar \
   wget \
-  make
+  alpine-sdk
 
 RUN pip3 install --upgrade pip
 RUN pip3 install requests awscli==${AWSCLI}
