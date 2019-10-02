@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM golang:1.13.1-alpine3.10
 
 ENV KUBE_VERSION v1.14.1
 ENV HELM_VERSION v2.13.1
