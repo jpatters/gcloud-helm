@@ -1,10 +1,7 @@
-FROM golang:1.13.1-alpine3.10
+FROM alpine:3.10
 
-ENV KUBE_VERSION v1.14.1
-ENV HELM_VERSION v2.13.1
-ENV AWSCLI 1.16.243
-ENV AWS_AUTHENTICATOR_VERSION 1.14.6
-ENV AWS_AUTHENTICATOR_DATE 2019-08-22
+ENV KUBE_VERSION v1.14.6
+ENV HELM_VERSION v2.14.3
 
 RUN apk --update --no-cache add \
   bash \
@@ -13,17 +10,13 @@ RUN apk --update --no-cache add \
   jq \
   git \
   openssh-client \
-  python3 \
+  python2 \
   tar \
   wget \
   alpine-sdk
 
-RUN pip3 install --upgrade pip
-RUN pip3 install requests awscli==${AWSCLI}
-
-# Install aws-iam-authenticator
-RUN curl https://amazon-eks.s3-us-west-2.amazonaws.com/${AWS_AUTHENTICATOR_VERSION}/${AWS_AUTHENTICATOR_DATE}/bin/linux/amd64/aws-iam-authenticator -o /usr/local/bin/aws-iam-authenticator && \
-    chmod +x /usr/local/bin/aws-iam-authenticator
+RUN curl -sSL https://sdk.cloud.google.com | bash
+ENV PATH $PATH:/root/google-cloud-sdk/bin
 
 # Install kubectl
 RUN curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl && \
